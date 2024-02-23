@@ -1,0 +1,33 @@
+{
+  "diagnostic": {
+    "errorSign": "x",
+    "warningSign": "!",
+    "infoSign": "?",
+    "checkCurrentLine": true
+  },
+  "coc": {
+    "preferences": {
+      "formatOnSaveFileTypes": ["go", "py", "c", "hs"]
+    }
+  },
+  "languageserver": {
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": [ "*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml" ],
+      "filetypes": ["hs", "haskell", "lhaskell"],
+      "settings": {
+        "haskell": {
+          "checkParents": "CheckOnSave",
+          "checkProject": true,
+          "maxCompletions": 40,
+          "formattingProvider": "ormolu",
+          "plugin": {
+            "stan": { "globalOn": true },
+            "ghcide-hover-and-symbols": { "globalOn": true} // required for hover to show docs on K
+          }
+        }
+      }
+    }
+  }
+}
