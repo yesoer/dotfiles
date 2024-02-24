@@ -1,0 +1,153 @@
+#!/usr/bin/env zsh
+## Author:  druckdev
+## Created: 2020-08-28
+##
+## A TUI for git-log using fzf.
+## Displays git-log in fzf and git-show as preview command for each commit.
+
+# TODO: preview breaks when files were passed but they were renamed and have a
+# different name at the point of this commit
+
+# extendedglob is necessary for the expansion of the binds array
+emulate -L zsh -o extendedglob
+
+# Return if fzf is not available
+if (( ! $+commands[fzf] )); then
+	printf "command not found: fzf" >&2
+	return 1
+fi
+
+# Return if not in git repo
+git rev-parse || return
+
+# One line format for fzf list view
+# abbreviated commit hash (yellow), title and ref names
+local formatshort='--pretty=format:%C(yellow)%h %Creset%s%C(auto)%d'
+# Verbose format for the preview window on the right
+# This array is stitched together with newlines later
+local -a format=(
+	'--pretty=format:%C(yellow)'     # newline created by this eaten by %-
+	'%-Commit:      %H%C(auto)'      # yellow commit hash
+	'             %D%Cblue'          # auto colored ref names (if any)
+	'Author:      %aN %aE%Cred'      # blue author mail
+	'AuthorDate:  %ad%Cblue'         # red author date
+	'Commit:      %cN %cE%Cred'      # blue commiter mail
+	'CommitDate:  %cd%Cblue'         # red commit date
+	'Signer:      %GS%Cgreen'        # signer name
+	'Key (%G?):     %GK'             # pgp key used to sign
+	'%Creset%C(bold)'                # empty line
+	'    %s%Creset'                  # bold white subject
+	''                               # newline
+	'%-b'                            # body
+	''                               # newline
+)
+
+# Ignore the graph part at the beginning, then capture the commit hash and throw
+# away the rest of the line.
+local commit_hash='s/^[^a-f0-9]*([a-f0-9]*).*$/\1/'
+
+local dateshort='--date=format:%F' # year
+local date="$dateshort %T %z" # year time timezone
+
+local -A fzf_preview
+read -r -d '' <<EOT
+	out="\$(echo -E {} | sed -E "$commit_hash")"; [[ -z "\$out" ]] ||
+EOT
+fzf_preview[construct]="$REPLY"
+
+read -r -d '' <<EOT
+	git show "${(j:%n:)format}" "$date" --color=always --patch-with-stat "\$out"
+EOT
+fzf_preview[patch]="$fzf_preview[construct] { $REPLY"
+# Get file arguments after (and including) `--` and wrap each in double quotes
+# TODO: Display `...` behind patch-stat if the patch touched more files
+# TODO: Use `-O <file>` for 'patch' command with `-- <file>` argument, so that
+#       the passed file is ontop although the full patch is shown
+# TODO: Support -L flag as well (add `-s` for list and `-- <file>` & maybe `-W`
+#       for preview)
+fzf_preview[files_only]="$fzf_preview[patch] ${(@)${@:${@[(ei)--]}}/(#m)*/\"$MATCH\"}"
+
+if (( $+commands[diff-so-fancy] )); then
+	fzf_preview[patch]+=" | diff-so-fancy --color=always"
+	fzf_preview[files_only]+=" | diff-so-fancy --color=always"
+fi
+
+fzf_preview[patch]+="; }"
+fzf_preview[files_only]+="; }"
+
+read -r -d '' <<EOT
+	git show "${(j:%n:)format}" "$date" --color=always --stat "\$out"
+EOT
+fzf_preview[stat]="$fzf_preview[construct] { $REPLY; }"
+
+# Put the commit hash into the clipboard
+# (If no known clipboard tool is available, just print it)
+local fzf_copy_command="$fzf_preview[construct] echo -n \"\$out\""
+if [[ $OSTYPE =~ darwin ]] && (( $+commands[pbcopy] )); then
+	fzf_copy_command+=" | pbcopy"
+elif (( $+commands[xclip] )); then
+	fzf_copy_command+=" | xclip -selection c"
+fi
+
+local -A binds=(
+	# scroll in preview window
+	"ctrl-alt-j" "preview-down"
+	"ctrl-alt-k" "preview-up"
+	# Copy commit hash
+	"ctrl-y" "execute@$fzf_copy_command@"
+	# Open preview "fullscreen"
+	"enter" "execute@$fzf_preview[patch] | command less -R@"
+	# Preview stats
+	"ctrl-s" "preview($fzf_preview[stat])"
+	# Preview patch
+	"ctrl-p" "preview($fzf_preview[patch])"
+	# Files only
+	"ctrl-f" "preview($fzf_preview[files_only])"
+)
+
+# TODO: Make the --preview argument dependent of --stat flag (i.e.
+#       fzf_preview[stat] in this case). It does not really make sense to pass
+#       it to `git log` but can be an indicator for the preview function
+
+local -a fzf_args=(
+	# Understand ansi color escape sequences.
+	"--ansi"
+	# Expand the binds array in the format "key1:value1,key2:value2".
+	"--bind" "${(@kj:,:)binds/(#m)*/$MATCH:$binds[$MATCH]}"
+	# Execute git show on the commit as preview.
+	"--preview" "$fzf_preview[files_only]"
+	# Reverse the layout so that the newest commit is at the top.
+	"--reverse"
+	# Do not sort when typing to maintain the sorting by date.
+	"--no-sort"
+)
+
+# The preview-window should be placed differently depending on the dimensions of
+# the terminal. It should have at least 152 columns to fit a preview window on
+# the right (12 hash, 50 subject, 80 patch, 10 git graph and fzf ui).
+#
+# ctrl-space should cycle through the preview-window positions, starting with
+# hidden, then not the start position and than back the start position.
+local -a tty_size
+tty_size=(${=$(command stty size 2>/dev/null)})
+if (( ! $? )) && (( $tty_size[2] > 152 )); then
+	fzf_args+=(
+		--preview-window=right
+		--bind "ctrl-space:change-preview-window(hidden|bottom|right)"
+	)
+else
+	fzf_args+=(
+		--preview-window=down
+		--bind "ctrl-space:change-preview-window(hidden|right|bottom)"
+	)
+fi
+
+# Display the commits in the above format and pipe that into fzf if stdout is a
+# terminal.
+if [ -t 1 ]; then
+	git log "$formatshort" "$dateshort" --color=always "$@" \
+	| env LESS="$LESS${LESS:+ }-+F" fzf "${fzf_args[@]}"
+else
+	git log "$formatshort" "$dateshort" --color=always "$@"
+fi
+return 0

@@ -1,5 +1,7 @@
 # dotfiles
-My dotfiles (neovim, git, zsh, installs etc.) for MacOS only as of now
+My dotfiles (neovim, git, zsh, installs etc.) for MacOS only as of now.
+
+> Attention : The bootstrapping script has not yet been tested!
 
 ## Setup 
 
@@ -22,3 +24,8 @@ git clone https://github.com/yesoer/dotfiles.git
 ```
 
 You can now run the `bootstrap.sh` to finalize the install.
+
+## References
+
+[Druckdevs](https://github.com/druckdev) [dotfiles](https://github.com/druckdev/dotfiles) are always a hoot.
+I stole your glog script.

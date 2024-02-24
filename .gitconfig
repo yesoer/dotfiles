@@ -1,5 +1,7 @@
 [alias]
     bb = !"$HOME/.zsh/autoload/git-bb.sh"
+    glog = !"$HOME/.zsh/autoload/git-glog.zsh"
+
 [core]
 	editor = nvim
 [diff]

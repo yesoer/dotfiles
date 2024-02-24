@@ -124,3 +124,4 @@ export PATH="$HOME/.cabal/bin:$PATH"
 export FPATH="$HOME/.zsh/autoload/:$FPATH"
 
 autoload -U git-bb.sh
+autoload -U git-glog.sh

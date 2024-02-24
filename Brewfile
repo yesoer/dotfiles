@@ -14,6 +14,7 @@ brew "neovim"
 brew "node@16"
 brew "python@3.11"
 brew "ripgrep"
+brew "fzf"
 
 # Casks
 cask "amethyst"
