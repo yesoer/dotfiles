@@ -1,5 +1,7 @@
 [alias]
     bb = !"$HOME/.zsh/autoload/git-bb.sh"
+[core]
+	editor = nvim
 [diff]
 	colorMoved = default
 	renameLimit = 0
@@ -16,5 +18,3 @@
 [user]
 	name = yesoer
 	email = 71628012+yesoer@users.noreply.github.com
-[core]
-	editor = nvim
