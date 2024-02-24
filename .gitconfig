@@ -1,5 +1,13 @@
 [alias]
     bb = !"$HOME/.zsh/autoload/git-bb.sh"
+[diff]
+	colorMoved = default
+	renameLimit = 0
+
+	submodule = log
+    tool = nvimdiff
+[difftool]
+    prompt = false
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
