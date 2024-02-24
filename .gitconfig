@@ -21,6 +21,7 @@
 	keepBackup = false
 	prompt = false
 [mergetool "nvim"]
+    # DEVNOTE : if this causes issues consider using meld
     # :diffget local and :diffget remote to choose a side. To jump to the next 
     # change use [c. :wqa finishes the process
 	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
