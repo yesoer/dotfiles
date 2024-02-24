@@ -14,7 +14,16 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-	clean = git-lfs clean -- %f
+    clean = git-lfs clean -- %f
+[merge]
+	tool = "nvim"
+[mergetool]
+	keepBackup = false
+	prompt = false
+[mergetool "nvim"]
+    # :diffget local and :diffget remote to choose a side. To jump to the next 
+    # change use [c. :wqa finishes the process
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
 [user]
 	name = yesoer
 	email = 71628012+yesoer@users.noreply.github.com
