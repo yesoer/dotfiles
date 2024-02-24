@@ -87,6 +87,10 @@ language_specific_installs() {
     hoogle generate
 }
 
+logins() {
+    gh auth login
+}
+
 main() {
     installs
     language_specific_installs
@@ -94,6 +98,8 @@ main() {
     setup_sym_links
     setup_security
     setup_zsh
+
+    logins
 }
 
 TMP=$(mktemp -d)
