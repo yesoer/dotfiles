@@ -125,3 +125,4 @@ export FPATH="$HOME/.zsh/autoload/:$FPATH"
 
 autoload -U git-bb.sh
 autoload -U git-glog.sh
+autoload -U git-gstash.sh

@@ -1,6 +1,9 @@
 [alias]
     bb = !"$HOME/.zsh/autoload/git-bb.sh"
+
+    # Sourced from github.com/druckdev/dotfiles
     glog = !"$HOME/.zsh/autoload/git-glog.zsh"
+    gstash = !"$HOME/.zsh/autoload/git-gstash.zsh"
 
 [core]
 	editor = nvim

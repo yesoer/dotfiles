@@ -52,6 +52,7 @@ setup_sym_links() {
     ln -s $HOME/.dotfiles/.config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
     ln -s $HOME/.dotfiles/.zsh/autoload/git-bb.sh $HOME/.zsh/autoload/git-bb.sh
     ln -s $HOME/.dotfiles/.zsh/autoload/git-glog.zsh $HOME/.zsh/autoload/git-glog.zsh
+    ln -s $HOME/.dotfiles/.zsh/autoload/git-stash.zsh $HOME/.zsh/autoload/git-stash.zsh
     ln -s $HOME/.dotfiles/.gitconfig $HOME/.gitconfig
     ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
 }
