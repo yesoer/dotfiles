@@ -120,6 +120,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && \
 export PATH="$HOME/.ghcup/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 
+# Set go related locations
+export GOPATH=/Users/$USER/go
+export PATH=$GOPATH/bin:$PATH
+
 # Add fpath for functions to be autoloaded
 export FPATH="$HOME/.zsh/autoload/:$FPATH"
 
