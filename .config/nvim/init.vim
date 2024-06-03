@@ -199,6 +199,10 @@ let g:fzf_layout = {
 " so it can be closed faster
 let g:go_doc_popup_window = 1
 
+" for git gutter reduce update time (also affects the delay before nvim writes
+" to swap files)
+set updatetime=100
+
 "------------------------------------------------------------------------------
 " COLOR SCHEMES
 
