@@ -99,6 +99,11 @@ logins() {
     gh auth login
 }
 
+mac_config() {
+    # disable autocorrect in notes app
+    sudo defaults write com.apple.notes NSAutomaticSpellingCorrectionEnabled -bool false
+}
+
 main() {
     installs
     language_specific_installs
@@ -107,6 +112,7 @@ main() {
     setup_security
     setup_zsh
 
+    mac_config
     logins
 }
 
