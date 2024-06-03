@@ -74,6 +74,12 @@ setup_neovim() {
     nvim -c 'CocInstall coc-clangd' # coc c
     nvim -c 'CocInstall coc-pyright' # coc pyright
     nvim -c 'CocInstall coc-rust-analyzer' # coc rust
+
+    # GitGutter install
+    mkdir -p ~/.config/nvim/pack/airblade/start
+    cd ~/.config/nvim/pack/airblade/start
+    git clone https://github.com/airblade/vim-gitgutter.git
+    nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 }
 
 language_specific_installs() {
