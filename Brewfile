@@ -3,6 +3,7 @@ tap "homebrew/services"
 tap "spotify/public"
 
 # Regular installs
+brew "diff-so-fancy"
 brew "act"
 brew "cmake"
 brew "gh"

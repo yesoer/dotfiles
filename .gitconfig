@@ -6,6 +6,7 @@
     gstash = !"$HOME/.zsh/autoload/git-gstash.zsh"
 
 [core]
+    pager = diff-so-fancy | less --tabs=4 -RF
 	editor = nvim
 [diff]
 	colorMoved = default
@@ -20,6 +21,8 @@
 	process = git-lfs filter-process
 	required = true
     clean = git-lfs clean -- %f
+[interactive]
+    diffFilter = diff-so-fancy --patch
 [merge]
 	tool = "nvim"
 [mergetool]
