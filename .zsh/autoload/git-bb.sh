@@ -124,7 +124,8 @@ while read -r ref upstream; do
         status_checks=$(get_branch_check_succ_cnt $branch)
     fi
    
-    last_commit_date=$(git log -1 --format="%cr" $branch)
+    last_commit_msg=$(git log $branch -1 --pretty=%B)
+    last_commit_date="$(git log -1 --format="%cr" $branch) : $last_commit_msg"
     behind_ahead=$(git rev-list --left-right --count HEAD...$branch)
     
     # Mark the current branch with an *
