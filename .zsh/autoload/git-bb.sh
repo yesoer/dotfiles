@@ -52,7 +52,7 @@ if [ $gh_cli_available = true ] && [ $is_github = true ]; then
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/$owner/$repo/actions/runs?exclude_pull_requests=true)
-    
+
     # Get the total number of unique workflows
     # TODO : counts matrix workflows as 1 which the github ui does not
     num_workflows=$(echo "$status_check_info" | jq \
@@ -91,12 +91,17 @@ pad_string() {
     printf "%-${length}s" "$str"
 }
 
-# Function to extract the number of successfull status checks for a branch
+# Function to extract the number of successful status checks for a branch
 get_branch_check_succ_cnt() {
     branch=$1
-    succ_cnt=$(echo "$status_check_info" | jq --arg branch "$branch" \
-        '.workflow_runs | map(select(.conclusion == "success" 
-            and .head_branch == $branch)) | length')
+    fail_count=$(echo "$status_check_info" | jq --arg branch "$branch" \
+        '.workflow_runs 
+            | map(select(.head_branch == $branch)) 
+            | unique_by(.workflow_id) 
+            | map(select(.conclusion == "failure")) 
+            | length')
+    
+    succ_cnt=$((num_workflows - fail_count))
     echo "$succ_cnt/$num_workflows"
 }
 
