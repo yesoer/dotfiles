@@ -32,10 +32,10 @@ owner=$(git config --get remote.origin.url | awk -F/ '{print $(NF-1)}')
 curr_branch=$(git branch --show-current)
 
 # Set headers for each column
-name_header="Branch name"
-last_updated_header="Last updated"
-status_checks_header="Status checks"
-behind_ahead_header="Behind|Ahead"
+name_header="Branch Name"
+last_updated_header="Last Updated"
+status_checks_header="Status Checks"
+behind_ahead_header="Behind Ahead Remote"
 
 # Initialize variables to store max lengths for each column
 max_branch_length=${#name_header}
@@ -111,12 +111,6 @@ dates=()
 checks=()
 behinds_aheads=()
 while read -r ref upstream; do
-
-    # Skip remotes in ref variable
-    if [[ "$ref" == refs/remotes/origin* ]]; then
-        continue
-    fi
-
     # Only get status checks for remote branches
     branch="${ref#refs/heads/}"
     status_checks=("N/A")
@@ -126,10 +120,11 @@ while read -r ref upstream; do
    
     last_commit_msg=$(git log $branch -1 --pretty=%B)
     last_commit_date="$(git log -1 --format="%cr" $branch) : $last_commit_msg"
+    h=$(git rev-parse HEAD)
     behind_ahead=$(git rev-list --left-right --count HEAD...$branch)
     
     # Mark the current branch with an *
-    branch_name=$branch
+    branch_name="$branch [$upstream]"
     if [[ $branch == $curr_branch ]]; then
         branch_name="* $branch_name"
     fi
@@ -140,7 +135,7 @@ while read -r ref upstream; do
     names+=("$branch_name")
 
     update_max_lengths
-done < <(git for-each-ref --format '%(refname) %(upstream)' refs/heads refs/remotes/origin)
+done < <(git branch -vv --format '%(refname) %(upstream)')
 
 # Print header row
 echo_row "$name_header" "$last_updated_header" "$status_checks_header" \
