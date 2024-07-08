@@ -35,7 +35,7 @@ curr_branch=$(git branch --show-current)
 name_header="Branch Name"
 last_updated_header="Last Updated"
 status_checks_header="Status Checks"
-behind_ahead_header="Behind Ahead Remote"
+behind_ahead_header="Behind-Ahead Remote"
 
 # Initialize variables to store max lengths for each column
 max_branch_length=${#name_header}
@@ -121,8 +121,11 @@ while read -r ref upstream; do
     last_commit_msg=$(git log $branch -1 --pretty=%B)
     last_commit_date="$(git log -1 --format="%cr" $branch) : $last_commit_msg"
     h=$(git rev-parse HEAD)
-    behind_ahead=$(git rev-list --left-right --count HEAD...$branch)
-    
+    behind_ahead=("N/A")
+    if [ ! -z "$upstream" ]; then
+        behind_ahead=$(git rev-list --left-right --count $upstream...$branch)
+    fi
+
     # Mark the current branch with an *
     branch_name="$branch [$upstream]"
     if [[ $branch == $curr_branch ]]; then
