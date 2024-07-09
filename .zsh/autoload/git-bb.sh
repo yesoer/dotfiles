@@ -127,7 +127,8 @@ while read -r ref upstream; do
     fi
 
     # Mark the current branch with an *
-    branch_name="$branch [$upstream]"
+    upstream_name="${upstream#refs/remotes/}"
+    branch_name="$branch [$upstream_name]"
     if [[ $branch == $curr_branch ]]; then
         branch_name="* $branch_name"
     fi
