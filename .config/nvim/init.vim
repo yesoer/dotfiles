@@ -181,7 +181,7 @@ call plug#begin("~/.vim/plugged")
  Plug 'junegunn/fzf.vim'                             " default fzf features
 
  " Cosmetics/easy tools
- Plug 'dracula/vim'                               " theme
+ Plug 'gruvbox-community/gruvbox'                 " theme
  Plug 'neoclide/coc.nvim', {'branch': 'release'}  " code completion
  Plug 'RRethy/vim-illuminate'                     " highlight other uses
  Plug 'github/copilot.vim'
@@ -232,4 +232,6 @@ augroup END
 "------------------------------------------------------------------------------
 " COLOR SCHEMES
 
-colorscheme dracula
+set background=dark
+let g:gruvbox_contrast_dark = 'hard'
+colorscheme gruvbox
