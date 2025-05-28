@@ -95,7 +95,12 @@ set completeopt-=preview
 set visualbell
 
 " spell checking
-setlocal spell spelllang=en_us,de_de
+" setlocal spell spelllang=en_us,de_de
+
+" disable spell checking
+" this may not be the best way to do it but I'm fed up with squiggly lines
+set nospell
+
 
 " reread file when changed from the outside
 set autoread
