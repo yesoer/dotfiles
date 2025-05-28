@@ -209,6 +209,14 @@ let g:go_doc_popup_window = 1
 set updatetime=100
 
 
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+" TODO : consider mapping to <c-j> and <c-k>
+nmap <silent> [g <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]g <Plug>(coc-diagnostic-next-error)
+
+
 " syntax highlighting mode for LLVM assembly files
 " from : https://chromium.googlesource.com/native_client/pnacl-llvm/+/refs/heads/main/utils/vim
 augroup filetype
