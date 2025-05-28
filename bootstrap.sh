@@ -46,10 +46,13 @@ setup_zsh() {
 
 setup_sym_links() {
     mkdir -p $HOME/.config/nvim
+    mkdir -p $HOME/.config/nvim/syntax
     mkdir -p $HOME/.zsh/autoload
 
     ln -s $HOME/.dotfiles/.config/nvim/init.vim $HOME/.config/nvim/init.vim
     ln -s $HOME/.dotfiles/.config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
+    ln -s $HOME/.dotfiles/.config/nvim/syntax/llvm.vim $HOME/.config/nvim/syntax/llvm.vim
+    ln -s $HOME/.dotfiles/.config/nvim/syntax/tablegen.vim $HOME/.config/nvim/syntax/tablegen.vim
     ln -s $HOME/.dotfiles/.zsh/autoload/git-bb.sh $HOME/.zsh/autoload/git-bb.sh
     ln -s $HOME/.dotfiles/.zsh/autoload/git-glog.zsh $HOME/.zsh/autoload/git-glog.zsh
     ln -s $HOME/.dotfiles/.zsh/autoload/git-stash.zsh $HOME/.zsh/autoload/git-stash.zsh

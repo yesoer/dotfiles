@@ -203,6 +203,19 @@ let g:go_doc_popup_window = 1
 " to swap files)
 set updatetime=100
 
+
+" syntax highlighting mode for LLVM assembly files
+" from : https://chromium.googlesource.com/native_client/pnacl-llvm/+/refs/heads/main/utils/vim
+augroup filetype
+    au! BufRead,BufNewFile *.ll     set filetype=llvm
+augroup END
+
+" syntax highlighting mode for TableGen description files
+" from : https://chromium.googlesource.com/native_client/pnacl-llvm/+/refs/heads/main/utils/vim
+augroup filetype
+    au! BufRead,BufNewFile *.td     set filetype=tablegen
+augroup END
+
 "------------------------------------------------------------------------------
 " COLOR SCHEMES
 
