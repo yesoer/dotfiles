@@ -118,7 +118,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && \
 
 # Set haskell related locations
 export PATH="$HOME/.ghcup/bin:$PATH"
-export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH" # "cabal install" target dir as configured in ~/.config/cabal/config
 
 # Set go related locations
 export GOPATH=/Users/$USER/go
